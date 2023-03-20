@@ -23,10 +23,10 @@ import org.objectweb.asm.tree.*;
 import java.util.*;
 
 public class ClassMerger {
-    private static final String SIDE_DESCRIPTOR = "Lxyz/unifycraft/uniloader/loader/api/Environment;";
-    private static final String ITF_DESCRIPTOR = "Lxyz/unifycraft/uniloader/loader/api/EnvironmentInterface;";
-    private static final String ITF_LIST_DESCRIPTOR = "Lxyz/unifycraft/uniloader/loader/api/EnvironmentInterfaces;";
-    private static final String SIDED_DESCRIPTOR = "Lxyz/unifycraft/uniloader/loader/api/Env;";
+    private static final String SIDE_DESCRIPTOR = "Lxyz/spruceloader/loader/api/Environment;";
+    private static final String ITF_DESCRIPTOR = "Lxyz/spruceloader/loader/api/EnvironmentInterface;";
+    private static final String ITF_LIST_DESCRIPTOR = "Lxyz/spruceloader/loader/api/EnvironmentInterfaces;";
+    private static final String SIDED_DESCRIPTOR = "Lxyz/spruceloader/loader/api/Env;";
 
     private abstract class Merger<T> {
         private final Map<String, T> entriesClient, entriesServer;

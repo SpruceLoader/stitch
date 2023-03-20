@@ -7,9 +7,16 @@ plugins {
 
 sourceCompatibility = 1.8
 
-version = "1.0.0"
-group = 'xyz.unifycraft'
+version = "1.1.0"
+group = 'xyz.spruceloader'
 archivesBaseName = project.name.toLowerCase()
+
+String gitBranch = System.getenv("GITHUB_REF_NAME")
+String gitCommit = System.getenv("GITHUB_SHA")
+if (gitBranch != null && gitCommit != null) {
+	String shortenedCommit = gitCommit.substring(0, 7)
+	version = "$version-SNAPSHOT+$gitBranch-$shortenedCommit"
+}
 
 repositories {
 	mavenCentral()
@@ -85,8 +92,8 @@ tasks.withType(JavaCompile).configureEach {
 void applyRepoCredentials(MavenArtifactRepository repo) {
 	repo.authentication.create("basic", BasicAuthentication.class)
 	repo.credentials {
-		username = property("unifycraft.publishing.username")?.toString()
-		password = property("unifycraft.publishing.password")?.toString()
+		username = getPublishingUsername()
+		password = getPublishingPassword()
 	}
 }
 
@@ -99,16 +106,18 @@ publishing {
 	}
 
 	repositories {
-		if (project.hasProperty("unifycraft.publishing.username") && project.hasProperty("unifycraft.publishing.password")) {
+		String publishingUsername = getPublishingUsername()
+		String publishingPassword = getPublishingPassword()
+		if (publishingUsername != null && publishingPassword != null) {
 			maven {
-				name = "UnifyCraftRelease"
-				url = uri("https://maven.unifycraft.xyz/releases")
+				name = "SpruceLoaderReleases"
+				url = uri("https://maven.spruceloader.xyz/releases")
 				applyRepoCredentials(it)
 			}
 
 			maven {
-				name = "UnifyCraftSnapshots"
-				url = uri("https://maven.unifycraft.xyz/snapshots")
+				name = "SpruceLoaderSnapshots"
+				url = uri("https://maven.spruceloader.xyz/snapshots")
 				applyRepoCredentials(it)
 			}
 		}
@@ -117,4 +126,18 @@ publishing {
 
 test {
 	useJUnitPlatform()
+}
+
+String getPublishingUsername() {
+	Object prop = project.findProperty("spruceloader.publishing.username")
+	if (prop != null) return prop.toString()
+
+	return System.getenv("SPRUCELOADER_PUBLISHING_USERNAME")
+}
+
+String getPublishingPassword() {
+	Object prop = project.findProperty("spruceloader.publishing.password")
+	if (prop != null) return prop.toString()
+
+	return System.getenv("SPRUCELOADER_PUBLISHING_PASSWORD")
 }
