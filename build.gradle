@@ -2,7 +2,7 @@ plugins {
 	id "java"
 	id "java-library"
 	id "maven-publish"
-	id "net.minecrell.licenser" version "0.4.1"
+	// id "net.minecrell.licenser" version "0.4.1"
 }
 
 sourceCompatibility = 1.8
@@ -49,10 +49,10 @@ dependencies {
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.1'
 }
 
-license {
-	header project.file("HEADER")
-	include "**/*.java"
-}
+// license {
+// 	   header project.file("HEADER")
+// 	   include "**/*.java"
+// }
 
 jar {
 	manifest {
@@ -63,6 +63,8 @@ jar {
 }
 
 task allJar(type: Jar) {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
 	from {
 		configurations.ship.collect {
 			it.isDirectory() ? it : zipTree(it)
